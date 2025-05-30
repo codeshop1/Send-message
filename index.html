@@ -2,145 +2,177 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Texte Temporaire Sécurisé</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>SecurePaste - Partage sécurisé</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            color: #333;
         }
         h1 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            max-width: 600px;
+            width: 100%;
         }
         textarea, input[type="password"] {
-            width: 90%;
-            max-width: 800px;
-            margin-bottom: 10px;
-            padding: 15px;
-            border: none;
+            width: 100%;
+            border: 1px solid #ddd;
             border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
             font-family: monospace;
             font-size: 14px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            resize: vertical;
         }
         button {
-            margin-top: 10px;
-            padding: 10px 20px;
+            background: #28a745;
+            color: white;
             border: none;
+            padding: 10px 15px;
             border-radius: 25px;
-            background: #ff7e5f;
-            color: #fff;
-            font-weight: 600;
+            margin-top: 15px;
             cursor: pointer;
+            font-weight: 600;
             transition: background 0.3s ease;
         }
         button:hover {
-            background: #feb47b;
-        }
-        #linkContainer, #passwordPrompt {
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            border-radius: 10px;
-            word-wrap: break-word;
-            max-width: 800px;
-        }
-        a {
-            color: #ffd86f;
-            word-break: break-all;
-        }
-        #displayText {
-            margin-top: 30px;
-            width: 90%;
-            max-width: 800px;
-            background: #2d2d2d;
-            padding: 20px;
-            border-radius: 10px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background: #218838;
         }
         .hidden {
             display: none;
         }
+        .link-box {
+            margin-top: 15px;
+            word-wrap: break-word;
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        #displayText {
+            white-space: pre-wrap;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-family: monospace;
+        }
+        .small-btn {
+            margin-left: 10px;
+            background: #007bff;
+        }
+        .small-btn:hover {
+            background: #0069d9;
+        }
     </style>
 </head>
 <body>
-    <h1>🔒 Générateur de Texte Sécurisé</h1>
-    <textarea id="inputText" placeholder="Colle ici ton texte ou ton code..."></textarea>
-    <input type="password" id="inputPassword" placeholder="Mot de passe (optionnel)">
-    <button id="generateLink">Générer le lien sécurisé</button>
+    <h1>🔒 SecurePaste</h1>
+    <div class="card" id="inputSection">
+        <label for="inputText">Texte ou code à partager :</label>
+        <textarea id="inputText" placeholder="Colle ici ton texte ou code..." rows="8"></textarea>
+        <label for="password">Mot de passe (optionnel) :</label>
+        <input type="password" id="password" placeholder="Définis un mot de passe (si besoin)">
+        <button id="generateLink">Générer le lien sécurisé</button>
 
-    <div id="linkContainer" class="hidden">
-        <p>Voici ton lien (valable 3 minutes) :</p>
-        <a id="shareLink" href="#" target="_blank"></a>
+        <div id="linkContainer" class="hidden">
+            <div class="link-box">
+                <p><strong>Lien :</strong> <span id="shareLink"></span></p>
+                <button class="small-btn" id="copyLink">Copier le lien</button>
+            </div>
+        </div>
     </div>
 
-    <div id="passwordPrompt" class="hidden">
-        <p>🔑 Entrez le mot de passe pour voir le texte :</p>
-        <input type="password" id="enterPassword" placeholder="Mot de passe">
+    <div class="card hidden" id="unlockSection">
+        <p>🔑 Ce texte est protégé par mot de passe :</p>
+        <input type="password" id="inputPassword" placeholder="Entre le mot de passe">
         <button id="unlockBtn">Déverrouiller</button>
     </div>
 
-    <div id="displayText" class="hidden">
-        <h2>Texte reçu :</h2>
-        <pre id="receivedText"></pre>
-        <button id="copyBtn">📋 Copier le texte</button>
+    <div class="card hidden" id="textSection">
+        <h3>📄 Texte reçu :</h3>
+        <div id="displayText"></div>
+        <button id="copyText">Copier le texte</button>
     </div>
 
     <script>
         const inputText = document.getElementById('inputText');
-        const inputPassword = document.getElementById('inputPassword');
+        const password = document.getElementById('password');
         const generateBtn = document.getElementById('generateLink');
         const linkContainer = document.getElementById('linkContainer');
         const shareLink = document.getElementById('shareLink');
-        const passwordPrompt = document.getElementById('passwordPrompt');
-        const enterPassword = document.getElementById('enterPassword');
+        const copyLink = document.getElementById('copyLink');
+
+        const unlockSection = document.getElementById('unlockSection');
+        const inputPassword = document.getElementById('inputPassword');
         const unlockBtn = document.getElementById('unlockBtn');
+
+        const textSection = document.getElementById('textSection');
         const displayText = document.getElementById('displayText');
-        const receivedText = document.getElementById('receivedText');
-        const copyBtn = document.getElementById('copyBtn');
+        const copyText = document.getElementById('copyText');
 
         generateBtn.addEventListener('click', () => {
             const text = inputText.value.trim();
-            const password = inputPassword.value.trim();
+            const pass = password.value.trim();
             if (text === '') {
                 alert('Le texte est vide !');
                 return;
             }
-            const expiry = Date.now() + 3 * 60 * 1000; // 3 minutes
-            const payload = btoa(JSON.stringify({ text, password, expiry }));
-            const url = window.location.origin + window.location.pathname + `#${payload}`;
-            shareLink.href = url;
+            const expiry = Date.now() + 3 * 60 * 1000;
+            const payload = btoa(JSON.stringify({ text, pass, expiry }));
+            const url = `${window.location.origin}${window.location.pathname}#${payload}`;
             shareLink.textContent = url;
             linkContainer.classList.remove('hidden');
         });
 
-        function loadTextFromURL() {
+        copyLink.addEventListener('click', () => {
+            navigator.clipboard.writeText(shareLink.textContent)
+                .then(() => alert('Lien copié !'))
+                .catch(() => alert('Erreur de copie.'));
+        });
+
+        copyText.addEventListener('click', () => {
+            navigator.clipboard.writeText(displayText.textContent)
+                .then(() => alert('Texte copié !'))
+                .catch(() => alert('Erreur de copie.'));
+        });
+
+        function loadFromHash() {
             if (window.location.hash.length > 1) {
                 try {
                     const data = JSON.parse(atob(window.location.hash.slice(1)));
                     if (Date.now() > data.expiry) {
                         document.body.innerHTML = '<h1>⏰ Ce lien a expiré.</h1>';
-                    } else if (data.password) {
-                        passwordPrompt.classList.remove('hidden');
+                        return;
+                    }
+                    if (data.pass) {
+                        unlockSection.classList.remove('hidden');
                         unlockBtn.addEventListener('click', () => {
-                            if (enterPassword.value === data.password) {
-                                passwordPrompt.classList.add('hidden');
-                                showText(data.text);
+                            if (inputPassword.value === data.pass) {
+                                unlockSection.classList.add('hidden');
+                                textSection.classList.remove('hidden');
+                                displayText.textContent = data.text;
                             } else {
-                                alert('Mot de passe incorrect !');
+                                alert('Mot de passe incorrect.');
                             }
                         });
                     } else {
-                        showText(data.text);
+                        textSection.classList.remove('hidden');
+                        displayText.textContent = data.text;
                     }
                 } catch (e) {
                     document.body.innerHTML = '<h1>❌ Lien invalide.</h1>';
@@ -148,18 +180,7 @@
             }
         }
 
-        function showText(text) {
-            displayText.classList.remove('hidden');
-            receivedText.textContent = text;
-        }
-
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(receivedText.textContent)
-                .then(() => alert('Texte copié dans le presse-papiers !'))
-                .catch(() => alert('Erreur lors de la copie.'));
-        });
-
-        loadTextFromURL();
+        loadFromHash();
     </script>
 </body>
 </html>
