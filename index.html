@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messages Anonymes</title>
-    <style>
-        /* Reset et Base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    /* Reset et Base */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -361,6 +361,7 @@
             color: #1f2937;
             text-align: center;
         }
+    
         
         .auth-footer {
             text-align: center;
@@ -482,9 +483,27 @@
                 <button class="btn btn-outline" id="logout-btn">Déconnexion</button>
             </div>
         </div>
-    </header>
+<body>
+    <p id="newMessageNotification" style="
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+    ">Actualisez la page pour voir si un nouveau message est arrivé !</p>
 
-    <!-- Main Content -->
+    <button onclick="window.location.reload()" style="
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: block;
+      margin: 0 auto;
+    ">Actualiser</button>
+    <!-- Header -->
+    <header>
     <main class="container">
         <!-- Home Page -->
         <section id="home-page">
