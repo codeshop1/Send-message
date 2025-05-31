@@ -2,185 +2,1094 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>SecurePaste - Partage sécurisé</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Messages Anonymes</title>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1f4037, #99f2c8);
+        /* Reset et Base */
+        * {
             margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
             color: #333;
+            background-color: #f5f7fa;
         }
-        h1 {
-            margin-bottom: 15px;
-            color: #fff;
+        
+        a {
+            text-decoration: none;
+            color: inherit;
         }
-        .card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        
+        ul {
+            list-style: none;
+        }
+        
+        button {
+            cursor: pointer;
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: #4f46e5;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: white;
+            color: #4f46e5;
+        }
+        
+        .btn-primary:hover {
+            background-color: #f0f0f0;
+        }
+        
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 150px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: #4b5563;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Dashboard */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .link-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .link-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        .link-description {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .link-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .link-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .unread-count {
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+        
+        .link-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-sm {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        /* Create Link Form */
+        .form-container {
             max-width: 600px;
-            width: 100%;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
-        textarea, input[type="password"] {
+        
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-control {
             width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 12px;
-            margin-top: 10px;
-            font-family: monospace;
-            font-size: 14px;
+            padding: 0.7rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
             resize: vertical;
         }
-        button {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 25px;
-            margin-top: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s ease;
+        
+        /* Messages Page */
+        .messages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
         }
-        button:hover {
-            background: #218838;
+        
+        .link-url-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
-        .hidden {
-            display: none;
-        }
-        .link-box {
-            margin-top: 15px;
-            word-wrap: break-word;
-            background: #f1f1f1;
-            padding: 10px;
-            border-radius: 10px;
-        }
-        #displayText {
-            white-space: pre-wrap;
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
+        
+        .link-url {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: #f9fafb;
             font-family: monospace;
         }
-        .small-btn {
-            margin-left: 10px;
-            background: #007bff;
+        
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
-        .small-btn:hover {
-            background: #0069d9;
+        
+        .message-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .message-content {
+            margin-bottom: 1.5rem;
+            white-space: pre-wrap;
+        }
+        
+        .response-form {
+            margin-top: 1rem;
+        }
+        
+        /* Public Message Page */
+        .public-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .public-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        .public-description {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+        
+        .success-message {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Auth Pages */
+        .auth-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .auth-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+            text-align: center;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #6b7280;
+        }
+        
+        .auth-link {
+            color: #4f46e5;
+            font-weight: 500;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1f2937;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: #d1d5db;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-3 {
+            margin-top: 1.5rem;
+        }
+        
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #dc2626;
         }
     </style>
 </head>
 <body>
-    <h1>🔒 SecurePaste</h1>
-    <div class="card" id="inputSection">
-        <label for="inputText">Texte ou code à partager :</label>
-        <textarea id="inputText" placeholder="Colle ici ton texte ou code..." rows="8"></textarea>
-        <label for="password">Mot de passe (optionnel) :</label>
-        <input type="password" id="password" placeholder="Définis un mot de passe (si besoin)">
-        <button id="generateLink">Générer le lien sécurisé</button>
-
-        <div id="linkContainer" class="hidden">
-            <div class="link-box">
-                <p><strong>Lien :</strong> <span id="shareLink"></span></p>
-                <button class="small-btn" id="copyLink">Copier le lien</button>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">AnonMessages</div>
+            <nav class="nav-links">
+                <a href="#" data-page="home">Accueil</a>
+                <a href="#" data-page="dashboard" class="hidden" id="dashboard-link">Tableau de bord</a>
+                <a href="#" data-page="create" class="hidden" id="create-link">Créer un lien</a>
+            </nav>
+            <div class="auth-buttons" id="auth-buttons">
+                <button class="btn btn-outline" data-page="login">Connexion</button>
+                <button class="btn btn-primary" data-page="register">Inscription</button>
+            </div>
+            <div class="hidden" id="user-menu">
+                <button class="btn btn-outline" id="logout-btn">Déconnexion</button>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div class="card hidden" id="unlockSection">
-        <p>🔑 Ce texte est protégé par mot de passe :</p>
-        <input type="password" id="inputPassword" placeholder="Entre le mot de passe">
-        <button id="unlockBtn">Déverrouiller</button>
-    </div>
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Home Page -->
+        <section id="home-page">
+            <div class="hero">
+                <h1>Recevez des messages anonymes</h1>
+                <p>Créez un lien unique à partager sur vos réseaux sociaux pour recevoir des feedbacks, des compliments ou des questions de manière anonyme.</p>
+                <div class="auth-buttons">
+                    <button class="btn btn-primary" data-page="register">Commencer maintenant</button>
+                </div>
+            </div>
+        </section>
 
-    <div class="card hidden" id="textSection">
-        <h3>📄 Texte reçu :</h3>
-        <div id="displayText"></div>
-        <button id="copyText">Copier le texte</button>
-    </div>
+        <!-- Dashboard Page -->
+        <section id="dashboard-page" class="hidden">
+            <div class="dashboard-header">
+                <h2>Vos liens</h2>
+                <button class="btn btn-primary" data-page="create">+ Créer un lien</button>
+            </div>
+            <div class="links-grid" id="links-container">
+                <!-- Liens seront ajoutés dynamiquement ici -->
+            </div>
+        </section>
+
+        <!-- Create Link Page -->
+        <section id="create-page" class="hidden">
+            <div class="form-container">
+                <h2 class="form-title">Créer un nouveau lien</h2>
+                <form id="create-link-form">
+                    <div class="form-group">
+                        <label for="link-title" class="form-label">Titre</label>
+                        <input type="text" id="link-title" class="form-control" required placeholder="Ex: Mon feedback personnel">
+                    </div>
+                    <div class="form-group">
+                        <label for="link-description" class="form-label">Description (optionnel)</label>
+                        <textarea id="link-description" class="form-control" placeholder="Ex: Envoyez-moi vos retours anonymes..."></textarea>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">Créer le lien</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Messages Page -->
+        <section id="messages-page" class="hidden">
+            <div class="messages-header">
+                <h2 id="messages-title">Messages</h2>
+                <button class="btn btn-secondary" data-page="dashboard">Retour</button>
+            </div>
+            
+            <div class="mb-3">
+                <div class="link-url-container">
+                    <input type="text" id="link-url" class="link-url" readonly>
+                    <button class="btn btn-secondary" id="copy-btn">Copier</button>
+                </div>
+                <small class="text-muted">Partagez ce lien pour recevoir des messages anonymes</small>
+            </div>
+            
+            <div class="message-list" id="messages-container">
+                <!-- Messages seront ajoutés dynamiquement ici -->
+            </div>
+        </section>
+
+        <!-- Public Message Page -->
+        <section id="public-page" class="hidden">
+            <div class="public-container">
+                <h2 class="public-title" id="public-link-title">Titre du lien</h2>
+                <p class="public-description" id="public-link-description">Description du lien</p>
+                
+                <div class="success-message hidden" id="success-message">
+                    Votre message anonyme a été envoyé avec succès!
+                </div>
+                
+                <form id="public-message-form">
+                    <div class="form-group">
+                        <label for="anonymous-message" class="form-label">Votre message anonyme:</label>
+                        <textarea id="anonymous-message" class="form-control" required rows="5"></textarea>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                    <p class="text-muted text-center">
+                        <small>Le propriétaire de ce lien ne verra pas qui a envoyé ce message.</small>
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Login Page -->
+        <section id="login-page" class="hidden">
+            <div class="auth-container">
+                <h2 class="auth-title">Connexion</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" id="login-username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password" class="form-label">Mot de passe</label>
+                        <input type="password" id="login-password" class="form-control" required>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">Se connecter</button>
+                    </div>
+                    <div class="auth-footer">
+                        Pas encore de compte? <a href="#" data-page="register" class="auth-link">S'inscrire</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Register Page -->
+        <section id="register-page" class="hidden">
+            <div class="auth-container">
+                <h2 class="auth-title">Inscription</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="register-username" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" id="register-username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email" class="form-label">Email</label>
+                        <input type="email" id="register-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password" class="form-label">Mot de passe</label>
+                        <input type="password" id="register-password" class="form-control" required>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                    </div>
+                    <div class="auth-footer">
+                        Déjà un compte? <a href="#" data-page="login" class="auth-link">Se connecter</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="logo">AnonMessages</div>
+            <div class="footer-links">
+                <a href="#">Conditions d'utilisation</a>
+                <a href="#">Politique de confidentialité</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="copyright">© 2023 AnonMessages. Tous droits réservés.</div>
+        </div>
+    </footer>
 
     <script>
-        const inputText = document.getElementById('inputText');
-        const password = document.getElementById('password');
-        const generateBtn = document.getElementById('generateLink');
-        const linkContainer = document.getElementById('linkContainer');
-        const shareLink = document.getElementById('shareLink');
-        const copyLink = document.getElementById('copyLink');
+        // Database Simulation
+        const DB = {
+            users: JSON.parse(localStorage.getItem('users')) || [],
+            links: JSON.parse(localStorage.getItem('links')) || [],
+            messages: JSON.parse(localStorage.getItem('messages')) || [],
+            currentUser: JSON.parse(localStorage.getItem('currentUser')) || null,
+            
+            saveUsers: function() {
+                localStorage.setItem('users', JSON.stringify(this.users));
+            },
+            
+            saveLinks: function() {
+                localStorage.setItem('links', JSON.stringify(this.links));
+            },
+            
+            saveMessages: function() {
+                localStorage.setItem('messages', JSON.stringify(this.messages));
+            },
+            
+            saveCurrentUser: function() {
+                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+            },
+            
+            clearCurrentUser: function() {
+                this.currentUser = null;
+                localStorage.removeItem('currentUser');
+            },
+            
+            // User methods
+            registerUser: function(username, email, password) {
+                if (this.users.some(u => u.username === username)) {
+                    return { success: false, message: 'Ce nom d\'utilisateur est déjà pris' };
+                }
+                
+                if (this.users.some(u => u.email === email)) {
+                    return { success: false, message: 'Cet email est déjà utilisé' };
+                }
+                
+                const user = {
+                    id: Date.now().toString(),
+                    username,
+                    email,
+                    password, // Note: En réalité, il faudrait hasher le mot de passe
+                    createdAt: new Date().toISOString()
+                };
+                
+                this.users.push(user);
+                this.saveUsers();
+                return { success: true, user };
+            },
+            
+            loginUser: function(username, password) {
+                const user = this.users.find(u => u.username === username && u.password === password);
+                if (!user) {
+                    return { success: false, message: 'Identifiants incorrects' };
+                }
+                
+                this.currentUser = user;
+                this.saveCurrentUser();
+                return { success: true, user };
+            },
+            
+            logoutUser: function() {
+                this.clearCurrentUser();
+                return { success: true };
+            },
+            
+            // Link methods
+            createLink: function(userId, title, description) {
+                const slug = generateSlug();
+                
+                const link = {
+                    id: Date.now().toString(),
+                    userId,
+                    slug,
+                    title,
+                    description: description || '',
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                };
+                
+                this.links.push(link);
+                this.saveLinks();
+                return { success: true, link };
+            },
+            
+            getUserLinks: function(userId) {
+                return this.links.filter(link => link.userId === userId);
+            },
+            
+            getLinkBySlug: function(slug) {
+                return this.links.find(link => link.slug === slug && link.isActive);
+            },
+            
+            deleteLink: function(linkId) {
+                const index = this.links.findIndex(link => link.id === linkId);
+                if (index === -1) return false;
+                
+                // Delete associated messages
+                this.messages = this.messages.filter(msg => msg.linkId !== linkId);
+                this.saveMessages();
+                
+                this.links.splice(index, 1);
+                this.saveLinks();
+                return true;
+            },
+            
+            // Message methods
+            createMessage: function(linkId, content) {
+                const message = {
+                    id: Date.now().toString(),
+                    linkId,
+                    content,
+                    createdAt: new Date().toISOString(),
+                    isRead: false,
+                    response: ''
+                };
+                
+                this.messages.push(message);
+                this.saveMessages();
+                return { success: true, message };
+            },
+            
+            getLinkMessages: function(linkId) {
+                return this.messages.filter(msg => msg.linkId === linkId)
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            },
+            
+            updateMessageResponse: function(messageId, response) {
+                const message = this.messages.find(msg => msg.id === messageId);
+                if (!message) return false;
+                
+                message.response = response;
+                this.saveMessages();
+                return true;
+            },
+            
+            deleteMessage: function(messageId) {
+                const index = this.messages.findIndex(msg => msg.id === messageId);
+                if (index === -1) return false;
+                
+                this.messages.splice(index, 1);
+                this.saveMessages();
+                return true;
+            },
+            
+            getUnreadCount: function(linkId) {
+                return this.messages.filter(msg => msg.linkId === linkId && !msg.isRead).length;
+            },
+            
+            markMessagesAsRead: function(linkId) {
+                this.messages.forEach(msg => {
+                    if (msg.linkId === linkId && !msg.isRead) {
+                        msg.isRead = true;
+                    }
+                });
+                this.saveMessages();
+            }
+        };
 
-        const unlockSection = document.getElementById('unlockSection');
-        const inputPassword = document.getElementById('inputPassword');
-        const unlockBtn = document.getElementById('unlockBtn');
+        // Helper functions
+        function generateSlug() {
+            return Math.random().toString(36).substring(2, 10);
+        }
 
-        const textSection = document.getElementById('textSection');
-        const displayText = document.getElementById('displayText');
-        const copyText = document.getElementById('copyText');
+        function showPage(pageId) {
+            document.querySelectorAll('section[id$="-page"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(`${pageId}-page`).classList.remove('hidden');
+        }
 
-        generateBtn.addEventListener('click', () => {
-            const text = inputText.value.trim();
-            const pass = password.value.trim();
-            if (text === '') {
-                alert('Le texte est vide !');
+        function updateAuthUI() {
+            const isLoggedIn = DB.currentUser !== null;
+            document.getElementById('auth-buttons').classList.toggle('hidden', isLoggedIn);
+            document.getElementById('user-menu').classList.toggle('hidden', !isLoggedIn);
+            document.getElementById('dashboard-link').classList.toggle('hidden', !isLoggedIn);
+            document.getElementById('create-link').classList.toggle('hidden', !isLoggedIn);
+        }
+
+        function renderLinks() {
+            const linksContainer = document.getElementById('links-container');
+            linksContainer.innerHTML = '';
+            
+            if (!DB.currentUser) return;
+            
+            const links = DB.getUserLinks(DB.currentUser.id);
+            
+            if (links.length === 0) {
+                linksContainer.innerHTML = `
+                    <div class="text-center">
+                        <p>Vous n'avez pas encore créé de lien.</p>
+                        <button class="btn btn-primary" data-page="create">Créer votre premier lien</button>
+                    </div>
+                `;
                 return;
             }
-            const expiry = Date.now() + 3 * 60 * 1000;
-            const payload = btoa(JSON.stringify({ text, pass, expiry }));
-            const url = `${window.location.origin}${window.location.pathname}#${payload}`;
-            shareLink.textContent = url;
-            linkContainer.classList.remove('hidden');
-        });
+            
+            links.forEach(link => {
+                const unreadCount = DB.getUnreadCount(link.id);
+                const messageCount = DB.getLinkMessages(link.id).length;
+                const url = `${window.location.origin}/#${link.slug}`;
+                
+                const linkElement = document.createElement('div');
+                linkElement.className = 'link-card fade-in';
+                linkElement.innerHTML = `
+                    <h3 class="link-title">${link.title}</h3>
+                    ${link.description ? `<p class="link-description">${link.description}</p>` : ''}
+                    <div class="link-stats">
+                        <span class="link-stat">
+                            ${unreadCount > 0 ? `<span class="unread-count">${unreadCount}</span> non lus` : 'Tous lus'}
+                        </span>
+                        <span class="link-stat">${messageCount} message${messageCount !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="link-actions">
+                        <button class="btn btn-secondary btn-sm" data-link-id="${link.id}">Voir messages</button>
+                        <button class="btn btn-danger btn-sm" data-delete-link="${link.id}">Supprimer</button>
+                    </div>
+                `;
+                
+                linksContainer.appendChild(linkElement);
+            });
+        }
 
-        copyLink.addEventListener('click', () => {
-            navigator.clipboard.writeText(shareLink.textContent)
-                .then(() => alert('Lien copié !'))
-                .catch(() => alert('Erreur de copie.'));
-        });
+        function renderMessages(linkId) {
+            const messagesContainer = document.getElementById('messages-container');
+            messagesContainer.innerHTML = '';
+            
+            const link = DB.links.find(l => l.id === linkId);
+            if (!link) return;
+            
+            document.getElementById('messages-title').textContent = `Messages: ${link.title}`;
+            document.getElementById('link-url').value = `${window.location.origin}/#${link.slug}`;
+            
+            const messages = DB.getLinkMessages(linkId);
+            
+            if (messages.length === 0) {
+                messagesContainer.innerHTML = `
+                    <div class="text-center">
+                        <p>Aucun message reçu pour le moment.</p>
+                        <p>Partagez votre lien pour commencer à recevoir des messages.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            messages.forEach(message => {
+                const date = new Date(message.createdAt).toLocaleString();
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message-card fade-in';
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <span>${date}</span>
+                        <button class="btn btn-sm btn-outline-danger" data-delete-message="${message.id}">Supprimer</button>
+                    </div>
+                    <div class="message-content">${message.content}</div>
+                    <form class="response-form" data-message-id="${message.id}">
+                        <div class="form-group">
+                            <label for="response-${message.id}" class="form-label">Réponse:</label>
+                            <textarea id="response-${message.id}" class="form-control" rows="2">${message.response || ''}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary">Enregistrer la réponse</button>
+                    </form>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
+            });
+        }
 
-        copyText.addEventListener('click', () => {
-            navigator.clipboard.writeText(displayText.textContent)
-                .then(() => alert('Texte copié !'))
-                .catch(() => alert('Erreur de copie.'));
-        });
-
-        function loadFromHash() {
-            if (window.location.hash.length > 1) {
-                try {
-                    const data = JSON.parse(atob(window.location.hash.slice(1)));
-                    if (Date.now() > data.expiry) {
-                        document.body.innerHTML = '<h1>⏰ Ce lien a expiré.</h1>';
-                        return;
-                    }
-                    if (data.pass) {
-                        unlockSection.classList.remove('hidden');
-                        unlockBtn.addEventListener('click', () => {
-                            if (inputPassword.value === data.pass) {
-                                unlockSection.classList.add('hidden');
-                                textSection.classList.remove('hidden');
-                                displayText.textContent = data.text;
-                            } else {
-                                alert('Mot de passe incorrect.');
-                            }
-                        });
-                    } else {
-                        textSection.classList.remove('hidden');
-                        displayText.textContent = data.text;
-                    }
-                } catch (e) {
-                    document.body.innerHTML = '<h1>❌ Lien invalide.</h1>';
-                }
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1);
+            
+            if (hash && DB.getLinkBySlug(hash)) {
+                showPublicPage(hash);
+            } else if (DB.currentUser) {
+                showPage('dashboard');
+                renderLinks();
+            } else {
+                showPage('home');
             }
         }
 
-        loadFromHash();
+        function showPublicPage(slug) {
+            const link = DB.getLinkBySlug(slug);
+            if (!link) return;
+            
+            document.getElementById('public-link-title').textContent = link.title;
+            document.getElementById('public-link-description').textContent = link.description || '';
+            showPage('public');
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+            handleHashChange();
+            
+            // Navigation
+            document.querySelectorAll('[data-page]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    
+                    if (page === 'dashboard' || page === 'create') {
+                        if (!DB.currentUser) {
+                            showPage('login');
+                            return;
+                        }
+                    }
+                    
+                    window.location.hash = '';
+                    showPage(page);
+                    
+                    if (page === 'dashboard') {
+                        renderLinks();
+                    }
+                });
+            });
+            
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                DB.logoutUser();
+                updateAuthUI();
+                showPage('home');
+                window.location.hash = '';
+            });
+            
+            // Register form
+            document.getElementById('register-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('register-username').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                
+                const result = DB.registerUser(username, email, password);
+                if (result.success) {
+                    DB.loginUser(username, password);
+                    updateAuthUI();
+                    showPage('dashboard');
+                    renderLinks();
+                } else {
+                    alert(result.message);
+                }
+            });
+            
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+                
+                const result = DB.loginUser(username, password);
+                if (result.success) {
+                    updateAuthUI();
+                    showPage('dashboard');
+                    renderLinks();
+                } else {
+                    alert(result.message);
+                }
+            });
+            
+            // Create link form
+            document.getElementById('create-link-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('link-title').value;
+                const description = document.getElementById('link-description').value;
+                
+                const result = DB.createLink(DB.currentUser.id, title, description);
+                if (result.success) {
+                    showPage('dashboard');
+                    renderLinks();
+                }
+            });
+            
+            // Public message form
+            document.getElementById('public-message-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const slug = window.location.hash.substring(1);
+                const link = DB.getLinkBySlug(slug);
+                if (!link) return;
+                
+                const message = document.getElementById('anonymous-message').value;
+                DB.createMessage(link.id, message);
+                
+                // Show success message and reset form
+                document.getElementById('success-message').classList.remove('hidden');
+                document.getElementById('public-message-form').reset();
+                
+                // Hide success message after 3 seconds
+                setTimeout(() => {
+                    document.getElementById('success-message').classList.add('hidden');
+                }, 3000);
+            });
+            
+            // Copy link button
+            document.getElementById('copy-btn').addEventListener('click', () => {
+                const urlInput = document.getElementById('link-url');
+                urlInput.select();
+                document.execCommand('copy');
+                alert('Lien copié dans le presse-papiers!');
+            });
+            
+            // Dynamic event delegation for links container
+            document.getElementById('links-container').addEventListener('click', (e) => {
+                if (e.target.hasAttribute('data-link-id')) {
+                    const linkId = e.target.getAttribute('data-link-id');
+                    DB.markMessagesAsRead(linkId);
+                    renderMessages(linkId);
+                    showPage('messages');
+                }
+                
+                if (e.target.hasAttribute('data-delete-link')) {
+                    if (confirm('Supprimer ce lien et tous ses messages?')) {
+                        const linkId = e.target.getAttribute('data-delete-link');
+                        DB.deleteLink(linkId);
+                        renderLinks();
+                    }
+                }
+            });
+            
+            // Dynamic event delegation for messages container
+            document.getElementById('messages-container').addEventListener('click', (e) => {
+                if (e.target.hasAttribute('data-delete-message')) {
+                    if (confirm('Supprimer ce message?')) {
+                        const messageId = e.target.getAttribute('data-delete-message');
+                        DB.deleteMessage(messageId);
+                        renderMessages(document.getElementById('messages-title').getAttribute('data-link-id'));
+                    }
+                }
+            });
+            
+            // Dynamic event delegation for response forms
+            document.getElementById('messages-container').addEventListener('submit', (e) => {
+                if (e.target.hasAttribute('data-message-id')) {
+                    e.preventDefault();
+                    const messageId = e.target.getAttribute('data-message-id');
+                    const response = e.target.querySelector('textarea').value;
+                    DB.updateMessageResponse(messageId, response);
+                    
+                    // Show a temporary feedback
+                    const btn = e.target.querySelector('button[type="submit"]');
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Réponse enregistrée!';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 2000);
+                }
+            });
+        });
+
+        // Handle hash changes
+        window.addEventListener('hashchange', handleHashChange);
     </script>
 </body>
 </html>
